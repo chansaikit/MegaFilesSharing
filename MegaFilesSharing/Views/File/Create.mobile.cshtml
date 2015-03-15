@@ -1,0 +1,78 @@
+﻿@model MegaFilesSharing.Models.File
+
+@{
+    ViewBag.Title = "Share";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+
+        @Html.HiddenFor(model => model.FileID)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Url)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Url)
+            @Html.ValidationMessageFor(model => model.Url)
+        </div>
+
+        <div class="editor-label">
+            Size
+        </div>
+
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FileSize)
+            @Html.ValidationMessageFor(model => model.FileSize)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FileType)
+        </div>
+
+        @Html.HiddenFor(model => model.Publisher)
+        @Html.HiddenFor(model => model.PublishDate)
+
+        <div class="editor-field">
+            <fieldset>
+                <div id="radio">
+                    <input type="radio" id="Game" name="FileType" value="Game">
+                    <label for="Game">Game</label>
+
+                    <input type="radio" id="Video" name="FileType" value="Video" checked="checked">
+                    <label for="Video">Video</label>
+
+                    <input type="radio" id="Audio" name="FileType" value="Audio">
+                    <label for="Audio">Audio</label>
+
+                    <input type="radio" id="Software" name="FileType" value="Software">
+                    <label for="Software">Software</label>
+
+                    <input type="radio" id="Others" name="FileType" value="Others">
+                    <label for="Others">Others</label>
+                </div>
+            </fieldset>
+             
+        </div>
+        <br />
+
+        <p>
+            <input data-theme="c" class="button" type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+ 

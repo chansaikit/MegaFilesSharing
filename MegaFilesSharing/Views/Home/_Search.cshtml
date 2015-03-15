@@ -1,0 +1,123 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<MegaFilesSharing.Models.File>
+
+@Styles.Render("~/Content/css")
+
+
+<div>
+
+    @if (Model == null)
+    {
+
+    }
+
+    else if (Model.Count() < 1)
+    {
+
+        <h2 id="font_center">
+            No File Found
+            <br />
+            help us to develope the database
+            <br />
+            Sharing your files here
+            <br />
+            <a style="color:#ff0000;text-decoration:underline;" href="/File/Create">Click to Share</a>
+
+        </h2>
+    }
+    else
+    {
+
+        <p>
+            @ViewBag.numOfResults
+            Results Found
+        </p>
+
+        <div class="col-sm-10">
+            <div class="center">
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { ViewBag.searchString, ViewBag.type, ViewBag.porn, page })
+                 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+                 new AjaxOptions()
+                 {
+                     HttpMethod = "GET",
+                     UpdateTargetId = "searchResults",
+                     LoadingElementId = "loading",
+                     OnBegin = "beginPaging",
+                     OnSuccess = "successPaging",
+                     OnFailure = "failurePaging"
+                 }))
+
+            </div>
+        </div>
+
+
+
+
+        <table class="sample">
+            <tr>
+                <th id="FileType">
+                    Type
+                </th>
+                <th>
+                    Name
+                </th>
+                <th class="filedate">
+                    Date
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td id="blue">
+                        <span style="display:block">
+                            @Html.DisplayFor(modelItem => item.FileType)
+                        </span>
+                        @if (item.Porn)
+                        {
+                            <text>(Porn)</text>
+                        }
+                    </td>
+                    <td>
+
+                        <div id="filetitle">
+                            @Html.ActionLink(item.Name, "Details", "File", new { id = item.FileID, title = item.getURLName() }, null)
+                        </div>
+
+                        <div id="filedetail">
+                            <a href=@item.Url target="_blank">@item.Url</a>
+                            <br />   &nbsp;Source: @Html.DisplayFor(modelItem => item.Source)
+                            @if (item.FileSize != null)
+                            {
+                                <text>|| Size:</text> @Html.DisplayFor(modelItem => item.FileSize) <text> MB</text>
+                            }
+                            || Views: @Html.DisplayFor(modelItem => item.NumOfView)
+                        </div>
+                    </td>
+                    <td class="filedate">
+                        @Html.DisplayFor(modelItem => item.PublishDate)
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <div class="col-sm-10">
+            <div class="center">
+                @Html.PagedListPager(Model, page => Url.Action("Index",
+         new { ViewBag.searchString, ViewBag.type, ViewBag.porn, page })
+                 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+                 new AjaxOptions()
+                 {
+                     HttpMethod = "GET",
+                     UpdateTargetId = "searchResults",
+                 }))
+
+            </div>
+        </div>
+
+    }
+
+
+</div>

@@ -1,0 +1,71 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<MegaFilesSharing.Models.File>  
+
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+
+<div>
+
+
+
+    @*@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {*@
+
+    @using (Ajax.BeginForm("Index", "Home",
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "searchResults",
+                                HttpMethod = "get",
+                                LoadingElementId = "loading", 
+                                OnSuccess = "successPaging",
+                                OnFailure = "failurePaging"
+                            },
+                            new { id = "frm-search" }))
+    {
+
+        <table style="width:100%">
+            <tr>
+                <td style="float:none">
+
+                    <div class="form-wrapper " id="center_s">
+                        <input type="text" name="searchString" id="search" placeholder="Search For Video, Audio, Game..." required>
+                        <input type="hidden" name="type" value="All" />
+                        <input type="submit" value="Search" id="submit" />
+                    </div>
+                </td>
+ 
+            </tr>
+
+        </table>
+
+
+    }
+</div>
+<div id="searchResults">
+    @{Html.RenderPartial("_Search",  Model);}
+</div> 
+
+
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#searchResults').fadeOut('normal');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#searchResults').fadeIn('normal');
+        $('#searchResults').trigger('create'); 
+    }
+
+    function failurePaging() {
+        alert("Could not retrieve list.");
+    }
+
+</script>

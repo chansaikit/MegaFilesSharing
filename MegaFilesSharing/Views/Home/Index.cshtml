@@ -1,0 +1,109 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<MegaFilesSharing.Models.File>
+
+<link rel="stylesheet" type="text/css" href="~/Content/radio.css" />
+
+
+
+
+<div style="padding-bottom:15px;">
+
+    
+    @*@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {*@
+
+    @using (Ajax.BeginForm("Index", "Home",
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "searchResults",
+                                HttpMethod = "get",
+                                LoadingElementId = "loading",
+                                OnBegin = "beginPaging",
+                                OnSuccess = "successPaging",
+                                OnFailure = "failurePaging"
+                            },
+                            new { id = "frm-search" }))
+    {
+
+        <table style="width:99%">
+            <tr>
+                <td>
+
+                    <div class="form-wrapper ">
+                        <div style="display:block;">
+
+                            <input type="text" name="searchString" id="search" placeholder="Search For Video, Audio, Game..." required>
+                            <input type="submit" value="Search" id="submit" />
+                        </div>
+
+
+                        <div class="radioBtn">
+
+                            <p>
+                                <input type="radio" name="type" id="radio1" class="radio" value="All" checked />
+                                <label for="radio1">All</label>
+
+                                <input type="radio" name="type" id="radio6" class="radio" value="Game" />
+                                <label for="radio6">Game</label>
+
+                                <input type="radio" name="type" id="radio2" class="radio" value="Video" />
+                                <label for="radio2">Video</label>
+
+                                <input type="radio" name="type" id="radio3" class="radio" value="Audio" />
+                                <label for="radio3">Audio</label>
+
+                                <input type="radio" name="type" id="radio4" class="radio" value="Software" />
+                                <label for="radio4">Software</label>
+
+                                <input type="radio" name="type" id="radio5" class="radio" value="Others" />
+                                <label for="radio5">Others</label>
+
+                                <input id="foo" type="checkbox" name="porn" value="1"  />
+                                <label for="foo" onclick="">Porn</label>
+                            </p>
+
+                        </div>
+                    </div>
+                </td>
+
+
+            </tr>
+
+        </table>
+
+
+    }
+</div>
+<div id="loading">
+    <img src="~/Content/images/loading.gif" />
+</div>
+
+<div id="searchResults">
+    @{Html.RenderPartial("_Search", Model);}
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#loading').hide();
+
+
+
+    });
+
+    function beginPaging(args) {
+        // Animate
+        $('#searchResults').hide();
+    }
+
+
+    function successPaging() {
+        // Animate
+        $('#searchResults').fadeIn('normal');
+    }
+
+    function failurePaging() {
+        alert("Please search again");
+    }
+
+</script>

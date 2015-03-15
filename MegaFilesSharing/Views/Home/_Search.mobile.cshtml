@@ -1,0 +1,106 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<MegaFilesSharing.Models.File>
+
+@if (Model == null)
+{
+
+}
+
+else if (Model.Count() < 1)
+{
+
+    <h2 id="font_center">
+        No File Found
+        <br />
+        help us to develope the database
+        <br />
+        Sharing your files here
+        <br />
+        <a style="color:#ff0000;text-decoration:underline;" href="/File/Create">Click to Share</a>
+
+    </h2>
+}
+else
+{
+    <ul data-role="listview" data-filter="true">
+
+        @foreach (var item in Model)
+        {
+            <li>
+                @Html.ActionLink(item.Name, "Details", "File", new { id = item.FileID, title = item.getURLName() }, new { @class = "ui-btn ui-btn-icon-right ui-icon-carat-r" })
+
+
+                <p>
+                    @Html.DisplayFor(modelItem => item.PublishDate)  ||
+                    @Html.DisplayFor(modelItem => item.FileType)
+                    @if (item.Porn)
+                    {
+                        <text>(Porn)</text>
+                    }
+                    ||
+                    @Html.DisplayFor(modelItem => item.Source) ||
+                    Views: @Html.DisplayFor(modelItem => item.NumOfView)
+                </p>
+                <p>
+                    <a href=@item.Url target="_blank">
+                        @item.Url
+                    </a>
+                </p>
+
+
+            </li>
+        }
+    </ul>
+    <div style="padding-top:20px;">
+
+        @{
+        int next = @ViewBag.page + 1;
+        int pre = @ViewBag.page - 1;
+        }
+
+        @if (pre > 0)
+        {
+            using (Ajax.BeginForm("Index", "Home",
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "searchResults",
+                                HttpMethod = "get",
+                                OnSuccess = "successPaging",
+                                OnFailure = "failurePaging"
+                            },
+                            new { id = "frm-search" }))
+            {
+                <div style="float:left">
+                    <input name="searchString" value=@ViewBag.searchString type="hidden" />
+                    <input name="type" value=@ViewBag.type type="hidden" />
+                    <input name="page" value=@pre type="hidden" />
+                    <input type="submit" data-role="button" data-theme="a" data-inline="true" value="Back" />
+                </div>
+            }
+        }
+        @if (Model.Count() > 9)
+        {
+            using (Ajax.BeginForm("Index", "Home",
+                                new AjaxOptions
+                                {
+                                    UpdateTargetId = "searchResults",
+                                    HttpMethod = "get",
+                                    OnSuccess = "successPaging",
+                                    OnFailure = "failurePaging"
+                                },
+                                new { id = "frm-search" }))
+            {
+                <div style="float:right">
+                    <input name="searchString" value=@ViewBag.searchString type="hidden" />
+                    <input name="type" value=@ViewBag.type type="hidden" />
+                    <input name="page" value=@next type="hidden" />
+                    <input type="submit" data-role="button" data-theme="a" data-inline="true" value="Next" />
+                </div>
+            }
+        }
+    </div>
+}
+
+
+

@@ -1,0 +1,46 @@
+﻿@model MegaFilesSharing.Models.File
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+
+<fieldset>
+    <table class="tftable" border="1">
+        <tr><th class="title" style="font-size:22px" colspan="4">@Html.DisplayFor(model => model.Name)</th></tr>
+        <tr>
+            <th class="subtitle">File Type:</th>
+            <td style="width:25%">@Html.DisplayFor(model => model.FileType)</td>
+            <th class="subtitle">Source:</th>
+            <td>@Html.DisplayFor(model => model.Source)</td>
+        </tr>
+        <tr>
+            <th class="subtitle">Date:</th>
+            <td style="width:25%">@Html.DisplayFor(model => model.PublishDate)</td>
+            <th class="subtitle">Shared by:</th>
+            <td>@Html.DisplayFor(model => model.Publisher)</td>
+        </tr>
+        <tr>
+            <th class="subtitle">Views:</th>
+            <td style="width:25%">@Html.DisplayFor(model => model.NumOfView)</td>
+            <th class="subtitle">Size:</th>
+            <td>@Html.DisplayFor(model => model.FileSize)</td>
+        </tr>
+        <tr>
+            <th class="subtitle">Download Link:</th>
+            <td colspan="3">@Html.DisplayFor(model => model.Url)</td>
+        </tr>
+    </table>
+</fieldset>
+
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input class="button"  type="submit" value="Delete" /> 
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<MegaFilesSharing.Models.Comment> 
+
+ 
+
+@foreach(var item in Model){
+    <div class="comment">
+
+    <div class="name">@item.Poster</div>
+    <div title="Added at @item.Date" class="date">@item.Date</div>
+    <p>@item.CommentContent</p>
+</div>
+}

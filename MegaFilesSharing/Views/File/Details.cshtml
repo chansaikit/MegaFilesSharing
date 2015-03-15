@@ -1,0 +1,310 @@
+﻿@model MegaFilesSharing.Models.File
+
+@{
+    ViewBag.Title = Model.Name;
+    ViewBag.ogurl = Model.Url;
+    ViewBag.ogtype = "links-share:" + Model.FileType.ToLower();
+    ViewBag.url = @Request.Url.ToString();
+}
+
+
+
+<fieldset>
+
+    <style type="text/css">
+        .tftable {
+            font-size: 12px;
+            color: #333333;
+            width: 99%;
+            border-width: 1px;
+            border-color: #729ea5;
+            border-collapse: collapse;
+        }
+
+        th.title {
+            font-size: 12px;
+            background-color: #acc8cc;
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #729ea5;
+            text-align: left;
+        }
+
+        th.subtitle {
+            width: 12%;
+        }
+
+        .tftable tr {
+            background-color: #ffffff;
+        }
+
+        .tftable td {
+            font-size: 12px;
+            border-width: 1px;
+            padding: 8px;
+            border-color: #729ea5;
+        }
+
+            .tftable td:hover {
+                background-color: #ffff99;
+            }
+    </style>
+
+
+    <table class="tftable" border="1">
+        <tr><th class="title" style="font-size:22px" colspan="4">
+            <h3 style="padding:0px;margin:0px;">
+                @Html.DisplayFor(model => model.Name)
+            </h3>
+            </th></tr>
+        <tr>
+            <th class="subtitle">File Type:</th>
+            <td style="width:25%">
+                @Html.DisplayFor(model => model.FileType)
+                @if (Model.Porn)
+                {
+                    <text>(Porn)</text>
+                }
+            </td>
+            <th class="subtitle">Source:</th>
+            <td>@Html.DisplayFor(model => model.Source)</td>
+        </tr>
+        <tr>
+            <th class="subtitle">Date:</th>
+            <td style="width:25%">@Html.DisplayFor(model => model.PublishDate)</td>
+            <th class="subtitle">Shared by:</th>
+            <td>@Html.DisplayFor(model => model.Publisher)</td>
+        </tr>
+        <tr>
+            <th class="subtitle">Views:</th>
+            <td style="width:25%">@Html.DisplayFor(model => model.NumOfView)</td>
+            @if (Model.FileSize != null)
+            {
+                <th class="subtitle">
+
+                    <text>Size:</text>
+
+                </th>}
+            @if (Model.FileSize != null)
+            {
+                <td>
+                    @Html.DisplayFor(model => model.FileSize)
+
+                    <text> MB</text>
+                </td>
+            }
+        </tr>
+        <tr>
+            <th class="subtitle">Link:</th>
+            <td colspan="3">
+                <a href=@Model.Url target="_blank">
+                    @Model.Url
+                </a>
+            </td>
+        </tr>
+    </table>
+
+
+</fieldset>
+
+<p>
+    <a href="javascript:history.back()">Back</a>
+</p>
+
+<table class="detailtable">
+    <tr>
+        @*Local like btn*@
+        @if (User.Identity.IsAuthenticated)
+        {
+            <td>
+
+                <div class="likebtn">
+                    <span onclick="like();" id="myDiv">
+                        Like @if (ViewBag.like != 0)
+                        { @ViewBag.like}
+                    </span>
+                </div>
+            </td>
+        }
+
+        <td>
+            @*Tweet Share*@
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="MegaFilesSharing">Tweet</a>
+
+        </td>
+        <td>
+            @*Google Plus Like*@
+            <!-- Place this tag where you want the +1 button to render. -->
+            <div class="g-plusone" data-size="medium" data-annotation="inline" data-width="300"></div>
+
+        </td>
+
+    </tr>
+    <tr>
+        <td colspan="3">
+            @*Facebook Like and Sahre*@
+            <div>
+                <div id="fb-root"></div>
+                <div class="fb-like" data-href=@Request.Url.ToString() data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+@*Comment Tab*@
+<div style="width:80%">
+    <div class="ionTabs" id="tabs_1" data-name="Comment_Tab">
+        <ul class="ionTabs__head">
+            <li class="ionTabs__tab" data-target="localComment">Comment</li>
+            <li class="ionTabs__tab" data-target="FBComment">Facebook</li>
+        </ul>
+        <div class="ionTabs__body">
+            <div class="ionTabs__item" data-name="localComment">
+                @*Local Comment*@
+
+                <div id="addCommentContainer">
+                    <p>Post Comment</p>
+                   
+                        <div>@using (Ajax.BeginForm("Details", "File",
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "comments",
+                                HttpMethod = "post",
+                                LoadingElementId = "loading",
+                                OnBegin = "lockbtn()"
+                            } ))
+                             { 
+                            <label for="body">Comment Body</label>
+                            <textarea required name="body" id="body" cols="90" rows="6"></textarea>
+                            <input name="act" value="comment" type="hidden" />
+                            <input type="submit"  id="submit" value="Submit" />
+}
+                        </div>
+                </div>
+
+                <div id="comments">
+                    @Html.Partial("_comments", @Model.Comments)
+                </div>
+
+
+            </div>
+            <div class="ionTabs__item" data-name="FBComment">
+
+                @*Facebook Comment*@
+                <div style="padding-top:15px;">
+                    <div id="fb-root"></div>
+                    <div class="fb-comments" data-width="620" data-numposts="5" data-colorscheme="light"></div>
+                </div>
+
+            </div>
+
+            <div class="ionTabs__preloader"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Google Plus Like -->
+<script type="text/javascript">
+    (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/platform.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+</script>
+
+
+
+@*Comment Tab Script*@
+<script>
+    //Lock comment btn for 30 seconds after making comment
+    function lockbtn(){ 
+        var button = document.getElementById("submit");
+        var oldValue = button.value;
+
+        button.setAttribute('disabled', true);
+        button.value = '...processing...';
+
+        setTimeout(function(){
+            button.value = oldValue;
+            button.removeAttribute('disabled');
+        }, 30000)
+    }
+
+
+    $.ionTabs("#tabs_1");
+
+    $.ionTabs("#tabs_1", {
+        type: "storage",                    // hash, storage or none
+        onChange: function(obj){            // callback
+            console.log(obj);
+        }
+    });
+    $(window).on("ionTabsChange", function(e, obj){
+        console.log(obj.group);
+        console.log(obj.tab);
+        console.log(obj.tabId);
+    });
+    $(".myButton").on("click", function(){
+        $.ionTabs.setTab("Comment_Tab", "Tab_1_name");
+    });
+</script>
+
+
+@*Tweet Share*@
+<script>
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+</script>
+
+
+@*Local Like btn Script*@
+<script>
+    var numLike = @ViewBag.like;
+
+
+    function like() {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                numLike = xmlhttp.responseText;
+                document.getElementById("myDiv").innerHTML = "Like " + numLike;
+
+            }
+        }
+        var data = "?act=like&body="+numLike;
+        xmlhttp.open("POST", data, true);
+        xmlhttp.send();
+
+    }
+</script>
+
+@*Facebook Like and Sahre*@
+<script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=485694728198607&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+@*Facebook Comment*@
+<script>
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=485694728198607&version=v2.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>

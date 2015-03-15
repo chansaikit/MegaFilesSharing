@@ -1,0 +1,43 @@
+﻿
+@using (Ajax.BeginForm("Create", "File",
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "auto",
+                                HttpMethod = "post",
+                                LoadingElementId = "loading",
+                                OnSuccess = "successPaging",
+                                OnFailure = "failurePaging"
+                            }))
+{
+    
+        @Html.AntiForgeryToken()
+    <p>
+        *AutoFill supports <span style="color:red;">mega.co.nz</span>
+        and <span style="color:red;"> Youtube</span> Link for now
+    </p>
+    <textarea id="ta" placeholder="Inserts one Link per Line"
+              data-val="true" data-val-required="Cant not Empty"
+              name="linkString">@ViewBag.text</textarea>
+
+            <input name="type" value="auto" type="hidden" />
+    <table>
+        <tr>
+            <td> 
+                <div class="buttons">
+                    <button type="submit" class="positive" >
+                        <img src="~/Images/icons/brick_add.png" alt="" />
+                        Share
+                    </button>
+                </div>
+            </td>
+            <td>
+                <div id="loading">
+                    <img src="~/Content/images/loading.gif" />
+                </div>
+            </td>
+        </tr>
+    </table>
+
+}
+
+<p class="warning"> @ViewBag.message</p>

@@ -1,0 +1,39 @@
+﻿@model MegaFilesSharing.Models.RegisterModel
+@Scripts.Render("~/bundles/jqueryval")
+@{
+    ViewBag.Title = "Register";
+}
+
+<hgroup class="title">
+    <h2>Create a new account.</h2>
+</hgroup>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <fieldset>
+        <legend>Registration Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword)
+            </li>
+        </ol>
+        <div class="buttons">
+            <button type="submit" class="positive">
+                <img src="~/Images/icons/user_add.png" alt="" />
+                Register
+            </button>
+        </div>
+    </fieldset>
+}
+ 

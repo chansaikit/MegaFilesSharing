@@ -1,0 +1,162 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<MegaFilesSharing.Models.File>
+
+
+<div class="col-sm-10">
+    <div class="center">
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page })
+                 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+                 new AjaxOptions()
+                 {
+                     HttpMethod = "GET",
+                     UpdateTargetId = "Results",
+                     OnBegin = "beginPaging",
+                     OnSuccess = "successPaging",
+                     OnFailure = "failurePaging"
+                 }))
+
+    </div>
+</div>
+
+<div>
+    <table class="sample">
+        <tr>
+            <th id="FileType">
+                Type
+            </th>
+            <th>
+                Name
+            </th>
+            <th class="filedate">
+                Date
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td id="blue">
+                    <span style="display:block">
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </span>
+                    @if (item.Porn)
+                    {
+                        <text>(Porn)</text>
+                    }
+                </td>
+                <td>
+
+                    <div id="filetitle">
+                        @Html.ActionLink(item.Name, "Details", "File", new {title = item.getURLName() , id = item.FileID }, null)
+                    </div>
+
+                    <div id="filedetail">
+                        Link: <a href=@item.Url target="_blank">
+                            @item.Url
+                        </a>
+                        <br />  Source: @Html.DisplayFor(modelItem => item.Source)
+                        @if (item.FileSize != null)
+                        {
+                            <text>|| Size:</text> @Html.DisplayFor(modelItem => item.FileSize) <text> MB</text>
+                        }
+                        || Views: @Html.DisplayFor(modelItem => item.NumOfView)
+
+
+                        <br />
+                        @Html.ActionLink("Edit", "Edit", new { id = item.FileID }) ||
+
+                        @Html.ActionLink("Delete", "Delete", new { id = item.FileID },
+                        new { @class = "delete-link" })
+
+
+                    </div>
+                </td>
+                <td class="filedate">
+                    @Html.DisplayFor(modelItem => item.PublishDate)
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div class="col-sm-10">
+        <div class="center">
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page })
+                 , PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+                 new AjaxOptions()
+                 {
+                     HttpMethod = "GET",
+                     UpdateTargetId = "Results",
+                     OnBegin = "beginPaging",
+                     OnSuccess = "successPaging",
+                     OnFailure = "failurePaging"
+                 }))
+
+        </div>
+    </div>
+
+    <!--
+        AJAX DELETE FUNCTION
+    -->
+
+    <div id="delete-dialog" title="Delete">
+        <p>Are you sure you want to delete this File?</p>
+    </div>
+
+    <script>
+
+        var deleteLinkObj;
+        // delete Link
+        $('.delete-link').click(function () {
+            deleteLinkObj = $(this);  //for future use
+            $('#delete-dialog').dialog('open');
+            return false; // prevents the default behaviour
+        });
+
+        $('#delete-dialog').dialog({
+            autoOpen: false, width: 400, resizable: false, modal: true, //Dialog options
+            buttons: {
+                "Continue": function () {
+                    $.post(deleteLinkObj[0].href, function (data) {  //Post to action
+                        if (data == "True") {
+                            deleteLinkObj.closest("tr").hide('fast'); //Hide Row
+                            //(optional) Display Confirmation
+                            alert("Sucess");
+                        }
+                        else {
+                            //(optional) Display Error
+                            alert("Delete Fail");
+                        }
+                    });
+                    $(this).dialog("close");
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+
+        function beginPaging(args) {
+            // Animate
+            //$('#Results').hide();
+        }
+
+
+        function successPaging() {
+            // Animate
+            $('#Results').fadeIn('normal');
+        }
+
+        function failurePaging() {
+            alert("Something Wrong!");
+        }
+
+
+    </script>
+
+
+</div>

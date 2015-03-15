@@ -1,0 +1,38 @@
+﻿@model PagedList<MegaFilesSharing.Models.File>
+@using PagedList;
+@using PagedList.Mvc; 
+
+
+@{
+    ViewBag.Title = "Your Files";
+}
+ 
+ 
+<div class="wrap" >
+
+    <h1>
+        Your Files
+    </h1>
+    <!-- change the class on the span below between 'top', 'right', 'bottom', 'left' -->
+
+    @*<button class="tip"> 
+        @Html.ActionLink("New Share", "Create" )
+        
+
+    </button>*@
+</div>   
+
+ <div id="Results">
+    @if (Model.Count() < 1 || Model == null)
+    {
+        <center>
+            @Html.Partial("_NoFileToView");
+        </center>
+    }
+
+    else
+    {
+        @Html.Partial("_listoffiles", Model);
+    }
+
+</div> 

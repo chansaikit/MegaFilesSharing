@@ -1,0 +1,21 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList<MegaFilesSharing.Models.File>
+
+@{
+    ViewBag.Title = "Your Files";
+}
+ 
+
+ <div id="searchResults">
+    @if (Model.Count() < 1 || Model == null)
+    {
+        @Html.Partial("_NoFileToView", Model);
+    }
+
+    else
+    {
+        @Html.Partial("_listoffiles", Model);
+    }
+
+</div> 
